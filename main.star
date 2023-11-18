@@ -1,5 +1,7 @@
 l1 = import_module("github.com/kurtosis-tech/ethereum-package/main.star")
 
+poster = import_module("./l2/poster/poster_launcher.star")
+
 def run(plan, args={}):
     plan.print("Launching L1 ethereum network...")
     l1_config = {
@@ -14,9 +16,15 @@ def run(plan, args={}):
     # figure how to fund the sequencer
     plan.print("Funding sequencer...")
 
+
     plan.print("Creating l1 traffic...")
 
     plan.print("Writing l2 chain config...")
+
+    plan.print("Deploying l2...")
+
+    
+    poster.launch_poster()
 
     plan.print("Deploying config...")
 
