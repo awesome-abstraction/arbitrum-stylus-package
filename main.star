@@ -1,23 +1,74 @@
-# NOTE: If you're a VSCode user, you might like our VSCode extension: https://marketplace.visualstudio.com/items?itemName=Kurtosis.kurtosis-extension
+l1 = import_module("github.com/kurtosis-tech/ethereum-package/main.star")
 
-# Importing the Postgres package from the web using absolute import syntax
-# See also: https://docs.kurtosis.com/starlark-reference/import-module
-postgres = import_module("github.com/kurtosis-tech/postgres-package/main.star")
+def run(plan, args={}):
+    plan.print("Launching L1 ethereum network...")
+    l1_config = {
+        "participants":[{
+            "el_client_type": "geth",
+            "cl_client_type": "prysm",
+        }],
+        "additional_services":[],
+    }
+    l1.run(plan, l1_config)
 
-# Importing a file inside this package using relative import syntax
-# See also: https://docs.kurtosis.com/starlark-reference/import-module
-lib = import_module("./lib/lib.star")
+    # figure how to fund the sequencer
+    plan.print("Funding sequencer...")
 
-# For more information on...
-#  - the 'run' function:  https://docs.kurtosis.com/concepts-reference/packages#runnable-packages
-#  - the 'plan' object:   https://docs.kurtosis.com/starlark-reference/plan
-#  - arguments:           https://docs.kurtosis.com/run#arguments
-def run(plan, name = "John Snow"):
-    plan.print("Hello, " + name)
+    plan.print("Creating l1 traffic...")
 
-    # https://docs.kurtosis.com/starlark-reference/plan#upload_files
-    config_json = plan.upload_files("./static-files/config.json")
+    plan.print("Writing l2 chain config...")
 
-    lib.run_hello(plan, config_json)
+    plan.print("Deploying config...")
 
-    postgres.run(plan)
+    plan.print("Initializing redis...")
+
+    plan.print("Funding l2 funnel...")
+
+    plan.print("Deploying token bridge...")
+
+    plan.print("Funding l3 users...")
+
+    plan.print("Create l2 traffic...")
+
+    plan.print("Writing l3 chain config...")
+
+    plan.print("Deploying l3...")
+
+    plan.print("Funding l3 funnel...")
+    # ADD SEQUENCER
+    #   sequencer:
+        # image: nitro-node-dev-testnode
+        # ports:
+        #   - "127.0.0.1:8547:8547"
+        #   - "127.0.0.1:8548:8548"
+        #   - "127.0.0.1:9642:9642"
+        # volumes:
+        #   - "seqdata:/home/user/.arbitrum/local/nitro"
+        #   - "config:/config"
+        # command: --conf.file /config/sequencer_config.json --node.feed.output.enable --node.feed.output.port 9642  --http.api net,web3,eth,txpool,debug --node.seq-coordinator.my-url  ws://sequencer:8548 --graphql.enable --graphql.vhosts * --graphql.corsdomain *
+        # depends_on:
+        #   - geth
+        #   - redis
+    # sequencer_config = ServiceConfig(
+    #     image=nitro-node-dev-testnode,
+    #     ports={
+    #         "ONE":"8547",
+    #         "TWO":"8548",
+    #         "THREE":"9642",
+    #     },
+    #     cmd:[
+    #         "--conf.file", 
+    #         "/config/sequencer_config.js",
+    #         "--node.feed.output.enable",
+    #         "--node.feed.output.port",
+    #         SEQUENCER_PORT_THREE,
+    #         "--http.api",
+    #         "net,web3,eth,txpool,debug",
+    #         "--node.feed.output.port",
+    #         "ws://sequencer:8548",
+    #         "--graphql.enable",
+    #         "--graphql.vhosts",
+    #         "*",
+    #         "--graphql.corsdomain",
+    #         "*",
+    #         ]
