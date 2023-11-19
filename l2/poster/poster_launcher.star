@@ -1,7 +1,7 @@
-
+consts = import_module("../constants.star")
 
 CONFIG_DIRPATH = "/config/"
-L2_CHAIN_CONFIG_JSON=CONFIG_DIRPATH + "l2_chain_config.json"
+L2_CHAIN_CONFIG_FILEPATH=CONFIG_DIRPATH + "l2_chain_config.json"
 
 # figure out where these come from
 DEPLOYMENT_FILEPATH=CONFIG_DIRPATH + "deployment.json"
@@ -27,10 +27,9 @@ DEPLOYED_CHAIN_INFO_FILEPATH=CONFIG_DIRPATH + "deployed_chain_info.json"
 # - /config/deployed_chain_info.json (l2 chain info? vs. l2 chain config?)
 def launch_poster(
     plan, 
+    geth_ws_endpoint,
+    sequencer_address, # figure out how to get sequencer address
     l1_keystore_path="", # figure out where to even get this
-    sequencer_address="", # figure out how to get sequencer address
-    geth_ws_endpoint="", # figure out how to pass this in
-    l1_chain_id="", #figure out how to get this
     args={}):
 
     l2_chain_config = {
@@ -45,7 +44,7 @@ def launch_poster(
                 "porttwo": PortSpec(number=8548, transport_protocol="http"),
         },
         files={
-            L2_CHAIN_CONFIG_JSON: l2_chain_config
+            L2_CHAIN_CONFIG_FILEPATH: l2_chain_config
         },
         entrypoint=[
             "/usr/local/bin/deploy",
@@ -67,9 +66,9 @@ def launch_poster(
             "--wasmrootpath",
             "/home/user/target/machines",
             "--l1chainid",
-            l1_chain_id,
+            consts.L1_CHAIN_ID,
             "--l2chainconfig",
-            L2_CHAIN_CONFIG_JSON,
+            L2_CHAIN_CONFIG_FILEPATH,
             "--l2chainname",
             "arb-dev-test",
             "--l2chaininfo",

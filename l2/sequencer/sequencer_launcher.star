@@ -16,7 +16,7 @@ def launch_sequencer(plan, args={}):
         ports={
             "http":PortSpec(number=HTTP_PORT, transport_protocol="http"),
             "ws":PortSpec(number=WS_PORT_NUM, transport_protocol="ws"),
-            "tcp":PortSpec(number=TCP_PORT, transport_protocol="tcp"), # don't know what this port is for yet
+            "tcp":PortSpec(number=TCP_PORT, transport_protocol="tcp"),
         },
         cmd=[
             "--conf.file",
@@ -36,6 +36,9 @@ def launch_sequencer(plan, args={}):
         ]
     )
 
-    plan.add_service("sequencer", seq_config)
+    sequencer_context = plan.add_service("sequencer", seq_config)
+
+    return sequencer_context
+    
 
     
