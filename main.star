@@ -1,23 +1,11 @@
-# NOTE: If you're a VSCode user, you might like our VSCode extension: https://marketplace.visualstudio.com/items?itemName=Kurtosis.kurtosis-extension
+l1 = import_module("./l1/l1.star")
+l2 = import_module("./l2/l2.star")
 
-# Importing the Postgres package from the web using absolute import syntax
-# See also: https://docs.kurtosis.com/starlark-reference/import-module
-postgres = import_module("github.com/kurtosis-tech/postgres-package/main.star")
+# - num sequencers num
+# - token bridge bool
+def run(plan, args={}):
+    plan.print("Deploying L1 ethereum network...")
+    l1_info = l1.launch_l1(plan)
 
-# Importing a file inside this package using relative import syntax
-# See also: https://docs.kurtosis.com/starlark-reference/import-module
-lib = import_module("./lib/lib.star")
-
-# For more information on...
-#  - the 'run' function:  https://docs.kurtosis.com/concepts-reference/packages#runnable-packages
-#  - the 'plan' object:   https://docs.kurtosis.com/starlark-reference/plan
-#  - arguments:           https://docs.kurtosis.com/run#arguments
-def run(plan, name = "John Snow"):
-    plan.print("Hello, " + name)
-
-    # https://docs.kurtosis.com/starlark-reference/plan#upload_files
-    config_json = plan.upload_files("./static-files/config.json")
-
-    lib.run_hello(plan, config_json)
-
-    postgres.run(plan)
+    plan.print("Deploying L2 arbitrum network...")
+    l2.launch_l2(plan, l1_info.eth_rpc_url, l1_info.eth_ws_url)
