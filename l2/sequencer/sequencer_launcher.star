@@ -1,5 +1,6 @@
 
-HTTP_PORT=9642
+HTTP_PORT=8547
+TCP_PORT=9642
 WS_PORT_NUM=8548
 
 # DOCKER COMPOSE CMD
@@ -13,9 +14,9 @@ def launch_sequencer(plan, args={}):
     seq_config = ServiceConfig(
         image="nitro-node-dev-testnode",
         ports={
-            "portone":PortSpec(number=8547, transport_protocol="tcp"),
-            "ws":PortSpec(number=WS_PORT_NUM, transport_protocol="ws"),
             "http":PortSpec(number=HTTP_PORT, transport_protocol="http"),
+            "ws":PortSpec(number=WS_PORT_NUM, transport_protocol="ws"),
+            "tcp":PortSpec(number=TCP_PORT, transport_protocol="tcp"), # don't know what this port is for yet
         },
         cmd=[
             "--conf.file",
@@ -34,5 +35,7 @@ def launch_sequencer(plan, args={}):
             "*",
         ]
     )
+
+    plan.add_service("sequencer", seq_config)
 
     
